@@ -1,0 +1,54 @@
+{% extends 'base1.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        
+        </style>
+<h1>Approve/Decline Transactions</h1>
+<form method="POST">
+    {% csrf_token %}
+{% if in_process %}
+    <table>
+        <tr>
+          <th>Account ID</th>
+          <th>To Account</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Transaction Time</th>
+          <th>Transaction Type</th>
+          <th>Your Decision</th>
+
+        </tr>
+        {% for tran in in_process %}
+        <tr>
+          <td>{{ tran.from_account.accountid }}</td>
+          <td>{{ tran.to_account.accountid }}</td>
+          <td>{{ tran.amount }}</td>
+          <td>{{ tran.get_status_display }}</td>
+          <td>{{ tran.transaction_time }}</td>
+          <td>{{ tran.get_ttype_display }}</td>
+          <td><input style="background-color: green;" type="submit" value="Approve" name="approve {{ tran.id }}"> <input style="background-color: red;" type="submit" value="Decline" name="decline {{ tran.id }}"></td>
+        </tr>
+        {% endfor %}
+
+      </table>
+      {% else %}
+      <h1>No transaction requests</h1>
+      {% endif %} 
+    </form>
+{% endblock %}

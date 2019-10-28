@@ -1,0 +1,6 @@
+{% extends 'base1.html' %}
+{% block title %}Insufficient Balance{% endblock %}
+{% block content %}
+<h1>Your account doesn't have the necessary amount</h1>
+<a href="{% url 'accounts:dashboard' %}">Go To Dashboard</a>
+{% endblock %}

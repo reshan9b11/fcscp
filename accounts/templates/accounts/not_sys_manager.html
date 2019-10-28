@@ -1,0 +1,6 @@
+{% extends 'base1.html' %}
+{% block title %}Not System Manager{% endblock %}
+{% block content %}
+<h1>Transactions of > 100000 can only be handled by a system manager and not a regular employee </h1>
+<a href="{% url 'accounts:dashboard' %}">Dashboard</a>
+{% endblock %}

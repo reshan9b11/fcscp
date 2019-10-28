@@ -1,0 +1,6 @@
+{% extends 'base1.html' %}
+{% block title %}Invalid Account{% endblock %}
+{% block content %}
+<h1>Please enter correct Account Number or an account number which exists</h1>
+<a href="{% url 'accounts:dashboard' %}">Go To Dashboard</a>
+{% endblock %}

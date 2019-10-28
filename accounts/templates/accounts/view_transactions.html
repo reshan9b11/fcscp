@@ -1,0 +1,72 @@
+{% extends 'base1.html' %}
+{% block title %}View Transactions{% endblock %}
+{% block content %}
+<style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        </style>
+<h2 style="text-align: center;">View Transactions</h2>
+<h4>Select account of to see the transactions</h4>
+<form method="POST">
+        {% csrf_token %}
+        {{ view_transactions.as_p }}
+        <button type="btn btn-success" value="submit">View</button>
+    </form>
+    {% comment %}
+<form method="POST" name="form" >
+    {% csrf_token %}        
+    <select id="from_account_number" name="from_account_number">
+    {% for account in user_accounts %}
+    <option value="{{ account.accountid }}" >{{ account.accountid }}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+    </form>{% endcomment %}
+
+        <br><br><br>
+        {% if transaction_list %}
+    <table>
+        <tr>
+          <th>Account ID</th>
+          <th>To Account</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Transaction Time</th>
+          <th>Transaction Type</th>
+
+        </tr>
+        {% for tran in transaction_list %}
+        <tr>
+          <td>{{ tran.from_account.accountid }}</td>
+          <td>{{ tran.to_account.accountid }}</td>
+          <td>{{ tran.amount }}</td>
+          <td>{{ tran.get_status_display }}</td>
+          <td>{{ tran.transaction_time }}</td>
+          <td>{{ tran.get_ttype_display }}</td>
+        </tr>
+        {% endfor %}
+
+      </table>
+      {% else %}
+      No Transactions Yet...
+      {% endif %} 
+      <br>
+      <h1>You have accounts-</h1>
+      {% for account in user_accounts %}
+      <h3>{{ account.accountid }}</h3>
+      {% endfor %} 
+    {% endblock %}
+

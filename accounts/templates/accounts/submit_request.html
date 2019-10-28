@@ -1,0 +1,15 @@
+{% extends 'base1.html' %}
+{% block title %}Send request to bank{% endblock %}
+{% block content %}
+<h2 style="text-align: center;">Send Money Of User To Bank</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ submit_form.as_p }}
+    <button type="btn btn-success" value="submit">Do It</button>
+</form>
+{% for account in user_accounts %}
+<h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
+{% endfor %} 
+
+    {% endblock %}
+

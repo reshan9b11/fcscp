@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+
+{% block head%}
+<title>
+Profile
+</title>
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <style type="text/css">
+    	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    </style>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+{% endblock %}
+
+{% block body%}
+<div class="container">
+<h1>Profile</h1>
+    <p>Username: {{ user }}</p>
+    <p>First name: {{ user.first_name }}</p>
+    <p>Last name: {{ user.last_name }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Phone: {{ user.userprofile.phone }}</p>
+    <p>City: {{ user.userprofile.city }}</p>
+    <p>Website: {{ user.userprofile.website }}</p>
+    <p>User Type: {{ user.userprofile.user_type }}</p>
+    <p>User Money: {{ user.userprofile.user_money }} rupees</p>
+    {% if user.userprofile.image %}
+    <img src="{{ user.userprofile.image.url }}" width="240" alt="Profile Pic">
+    {% endif %}
+
+</div>
+{% endblock %}

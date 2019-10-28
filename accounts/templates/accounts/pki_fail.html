@@ -1,0 +1,6 @@
+{% extends 'base1.html' %}
+{% block title %}PKI Fail{% endblock %}
+{% block content %}
+<h1>Uh Oh!!, The key that you provided doesn't seem to get authenticated by the server, kindly provide the correct public key of the user</h1>
+<a href="{% url 'accounts:dashboard' %}">Dashboard</a>
+{% endblock %}

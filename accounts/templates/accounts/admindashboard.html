@@ -1,0 +1,15 @@
+{% extends 'base1.html' %}
+{% block title %}Hello Admin{% endblock %}
+{% block content %}
+<h2 style="text-align: center;">Welcome {{ user.get_username }} - Admininstrator</h2>
+<br>
+<h4>Your Account Actions:</h4>
+<br>
+{% comment %}
+<a href="{% url 'accounts:approvetransactions' %}">Approve Transactions</a><br><br>
+<a href="{% url 'accounts:approvedebittransactions' %}">Approve Debit/Credit Transactions</a><br><br>
+<a href="{% url 'accounts:searchtransactionsinternal' %}">Search Transactions</a><br><br>
+{% endcomment %}
+<a href="{% url 'accounts:admin:index' %}">Go To Admin Panel</a>
+
+{% endblock %}

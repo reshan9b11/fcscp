@@ -1,0 +1,22 @@
+
+<!------ Include the above in your HEAD tag ---------->
+{% extends 'base.html' %}
+
+
+
+{% block body%}
+    <div class="container">
+					<h2>Welcome</h2>
+					You Can Log in Here
+					<br>
+				</br>
+
+					<form method="post">
+						{% csrf_token%}
+						{{form.as_p}}
+						<button type="submit">Login</button>
+					</form>
+						
+	</div>
+{% endblock %}	
+

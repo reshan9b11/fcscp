@@ -1,0 +1,34 @@
+{% extends 'base1.html' %}
+{% block title %}Transfer Funds{% endblock %}
+{% block content %}
+<h2 style="text-align: center;">Transfer Funds</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ transact_form.as_p }}
+    <button type="btn btn-success" value="submit">Transfer</button>
+</form>
+{% for account in user_accounts %}
+<h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
+{% endfor %} 
+{% comment %}
+<form method="POST" name="form">
+    {% csrf_token %}
+    
+    
+    <select id="from_account_number" name="from_account_number">
+    {% for account in user_accounts %}
+    <option value="{{ account.accountid }}" >{{ account.accountid }}</option>
+    {% endfor %}
+    </select>
+    From Account Number<br>
+        <!-- <input type="number" min="0" step="1" name="from_account_number" id="from_account_number" value="" placeholder="from account number"> From Account Number<br> -->
+        <input type="number" min="0" step="1" name="to_account_number" id="to_account_number" value="" placeholder="to account number"> To Account Number<br>
+        <input type="number" min="0" step="1" name="amount" id="amount" value="" placeholder="amount"> Amount<br>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% for account in user_accounts %}
+    <h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
+    {% endfor %} {% endcomment %}
+    {% endblock %}
+

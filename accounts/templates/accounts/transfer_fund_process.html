@@ -1,0 +1,6 @@
+{% extends 'base1.html' %}
+{% block title %}Approval{% endblock %}
+{% block content %}
+<h1>As the amount was > 10000, the transaction request has been sent to an internal user for approval</h1>
+<a href="{% url 'accounts:dashboard' %}">Dashboard</a>
+{% endblock %}

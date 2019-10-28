@@ -1,0 +1,50 @@
+{% extends 'base1.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        
+        </style>
+<h1>Approve/Decline Merchant Request</h1>
+<form method="POST">
+    {% csrf_token %}
+{% if request_list %}
+    <table>
+        <tr>
+          <th>From Merchant ID</th>
+          <th>For AccountID</th>
+          <th>Amount</th>
+          <th>Request Time</th>
+          <th>Your Decision</th>
+
+        </tr>
+        {% for request in request_list %}
+        <tr>
+          <td>{{ request.user.user.id }}</td>
+          <td>{{ request.from_account.accountid }}</td>
+          <td>{{ request.amount }}</td>
+          <td>{{ request.transaction_time }}</td>
+          <td><input style="background-color: green;" type="submit" value="Approve" name="approve {{ request.id }}"> <input style="background-color: red;" type="submit" value="Decline" name="decline {{ request.id }}"></td>
+        </tr>
+        {% endfor %}
+
+      </table>
+      {% else %}
+      <h1>No requests</h1>
+      {% endif %} 
+    </form>
+{% endblock %}
