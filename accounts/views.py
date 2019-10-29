@@ -175,9 +175,9 @@ class SubmitRequest(LoginRequiredMixin,TemplateView):
     def get(self,request):
         role=who_is(request)
         if role=='C':
-            return HttpResponseRedirect(reverse('admindashboard'))
+            return HttpResponseRedirect(reverse('accounts:admindashboard'))
         if role=='P':
-            return HttpResponseRedirect(reverse('managerdashboard'))
+            return HttpResponseRedirect(reverse('accounts:managerdashboard'))
         accounts = models.Account.objects.all()
         user_accounts=[]
         for account in accounts:
@@ -437,7 +437,7 @@ class ViewTransactions(LoginRequiredMixin,TemplateView):
     def get(self,request):
         role=who_is(request)
         if role=='P':
-            return HttpResponseRedirect(reverse('admindashboard'))
+            return HttpResponseRedirect(reverse('accounts:admindashboard'))
         if role=='C':
             return HttpResponseRedirect(reverse('accounts:managerdashboard'))
         form_class=ViewTransactionsForm
@@ -514,7 +514,7 @@ class ApproveTransactions(LoginRequiredMixin,TemplateView):
     def get(self,request):
         role=who_is(request)
         if role=='A':
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('accounts:dashboard'))
         transactions=models.Transaction.objects.all()
         in_process=[]
         for process_transactions in transactions:
@@ -552,7 +552,7 @@ class ApproveTransactions(LoginRequiredMixin,TemplateView):
                 for process_transactions in transactions:
                     if process_transactions.status=='PI':
                         in_process.append(process_transactions)
-                return HttpResponseRedirect(reverse('approvetransactions'))
+                return HttpResponseRedirect(reverse('accounts:approvetransactions'))
                 # return render(request,'approve_transactions.html',context={
                 #     'in_process':in_process
                 # })
@@ -566,7 +566,7 @@ class ApproveTransactions(LoginRequiredMixin,TemplateView):
                 for process_transactions in transactions:
                     if process_transactions.status=='PI' and process_transactions.ttype=='T':
                         in_process.append(process_transactions)
-                return HttpResponseRedirect(reverse('approvetransactions'))
+                return HttpResponseRedirect(reverse('accounts:approvetransactions'))
                 # return render(request,'approve_transactions.html',context={
                 #     'in_process':in_process
                 # })
