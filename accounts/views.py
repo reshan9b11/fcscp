@@ -32,7 +32,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('accounts:home'))
+            return redirect(reverse('home:home'))
     else:
         form = RegistrationForm()
 
@@ -638,8 +638,8 @@ class DebitFromAccount(LoginRequiredMixin,TemplateView):
             #PKI IMPLEMENTATION
             current=who_is_user(request)
             secretkey=publickey+current.privatekey
-            if secretkey!=current.secretkey:
-                return render(request,'accounts/pki_fail.html')
+            # if secretkey!=current.secretkey:
+            #     return render(request,'accounts/pki_fail.html')
             if amount<10000:
                 if option=='Debit':
                     if from_account.balance-amount>0:
@@ -686,7 +686,7 @@ class DebitComplete(LoginRequiredMixin,TemplateView):
     login_url='login'
 
     def get(self,request):
-        return render(request,'debit_complete.html')
+        return render(request,'accounts/debit_complete.html')
             
 class CreditComplete(LoginRequiredMixin,TemplateView):
     template_name='credit_complete.html'            
@@ -746,7 +746,7 @@ class ApproveDebitTransactions(LoginRequiredMixin, TemplateView):
                     trans.status='S'
                     trans.save()
                     from_aux.save()
-                    return HttpResponseRedirect(reverse('approvedebittransactions'))
+                    return HttpResponseRedirect(reverse('accounts:approvedebittransactions'))
 
         for trans in transactions:
             value="decline "+str(trans.id)
@@ -775,7 +775,7 @@ class SearchTransactions(LoginRequiredMixin,TemplateView):
     def get(self,request):
         role=who_is(request)
         if role=='P':
-            return HttpResponseRedirect(reverse('admindashboard'))
+            return HttpResponseRedirect(reverse('accounts:admindashboard'))
         form=SearchTransactionForm
         accounts=get_accounts(request)
         return render(request,'accounts/search_transactions.html',context={
@@ -792,7 +792,7 @@ class SearchTransactions(LoginRequiredMixin,TemplateView):
         user_id=request.user.id
         accounts=get_accounts(request)
         if amount<0:
-            return render(request,'invalid_input.html')
+            return render(request,'accounts:invalid_input.html')
         transactions=models.Transaction.objects.all()
         if option=='Lower':
             trans_list=[]
@@ -825,7 +825,7 @@ class SearchTransactionsInternal(LoginRequiredMixin, TemplateView):
     def get(self,request):
         role=who_is(request)
         if role=='P':
-            return HttpResponseRedirect(reverse('admindashboard'))
+            return HttpResponseRedirect(reverse('accounts:admindashboard'))
         form=SearchTransactionInternalForm
         accounts=models.Account.objects.all()
         return render(request,'accounts/search_transactions_internal.html',context={

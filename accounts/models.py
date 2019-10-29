@@ -17,6 +17,9 @@ class UserProfile(models.Model):
 	role=models.CharField(max_length=1,choices=ROLES,editable=True)
 	user_money=models.IntegerField(default='0')
 	image = models.ImageField(upload_to='profile_image', blank=True)
+	privatekey=models.TextField(editable=True,blank=True)
+	secretkey=models.TextField(editable=True,blank=True)
+
 
 	def __str__(self):
 		return self.user.username

@@ -142,3 +142,6 @@ LOGIN_EXEMPT_URLS = (
 
 EMAIL_HOST='localhost'
 EMAIL_PORT=1025
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+GOOGLE_RECAPTCHA_SECRET_KEY='6LfteHgUAAAAAE0OhNTM4ZFleH4xj4s6b8m9T_mJ'
