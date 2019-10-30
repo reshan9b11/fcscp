@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
 
 from django.shortcuts import render
@@ -18,13 +17,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView 
 
-from django.views.generic import ListView, DetailView 
-from django.views.generic.edit import UpdateView, DeleteView, CreateView
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TransferFundsForm, ViewTransactionsForm, SearchTransactionInternalForm, SubmitRequestForm
-
+from .forms import TransferFundsForm
 
 
 def register(request):
@@ -192,9 +187,11 @@ class TransferFunds(LoginRequiredMixin, TemplateView):
         accounts = models.Account.objects.all()
         user_id=request.user.id
         form=TransferFundsForm(request.POST)
+        from_account=get_accounts(request)
+        from_account = from_account.accountid
         if form.is_valid():
-            print (form.cleaned_data['from_account'])
-            from_account=get_accounts(request)
+            # print (form.cleaned_data['from_account'])
+            print(from_account.accountid)
             to_account=form.cleaned_data['to_account']
             amount=form.cleaned_data['amount']
             publickey=form.cleaned_data['publickey']
@@ -224,11 +221,11 @@ class TransferFunds(LoginRequiredMixin, TemplateView):
             return render(request,'accounts/invalid_account.html')
 
         #PKI IMPLEMENTATION
-        current=who_is_user(request)
-        secretkey=publickey+current.privatekey
-        if secretkey!=current.secretkey:
-            return render(request,'accounts/pki_fail.html')
-            print('Key is',secretkey)
+        # current=who_is_user(request)
+        # secretkey=publickey+current.privatekey
+        # if secretkey!=current.secretkey:
+        #     return render(request,'accounts/pki_fail.html')
+        #     print('Key is',secretkey)
 
         #IF EVERYTHING'S RIGHT
         flag=0
@@ -320,73 +317,6 @@ def who_is_user(request):
     return actual_user
     # print(actual_user.role)
 
-
-class ViewTransactions(LoginRequiredMixin,TemplateView):
-    template_name='view_transactions.html'
-    login_url='login'
-
-    def get(self,request):
-        form_class=ViewTransactionsForm
-        accounts=models.Account.objects.all()
-        user_id=request.user.id
-        user_accounts=[]
-        for account in accounts:
-            # print(account,account.user.id,user_id)
-            if account.user.user.id==user_id:
-                user_accounts.append(account)
-        print(user_accounts)
-
-        return render(request,'accounts/view_transactions.html',context={
-            'user_accounts':user_accounts,
-            'view_transactions':form_class,
-        })
-
-    def post(self,request):
-        accounts = models.Account.objects.all()
-        user_id=request.user.id
-        form=ViewTransactionsForm(request.POST)
-        if form.is_valid():
-            # print (form.cleaned_data['from_account'])
-            from_account=form.cleaned_data['from_account']
-            # raw_from_account=request.POST.get('from_account_number')            
-            user_id=request.user.id
-            user_accounts=[]
-            for account in accounts:
-                # print(account,account.user.id,user_id)
-                if account.user.user.id==user_id:
-                    user_accounts.append(account)
-        
-            all_user_account_ids=[]
-            for account in accounts:
-                if account.user.user.id==user_id:
-                    # print(account.accountid,raw_from_account)
-                    all_user_account_ids.append(account.accountid)
-            # print(all_user_account_ids)
-            if from_account not in all_user_account_ids:
-                print("from account error")
-                return render(request,'accounts/invalid_account.html')
-        
-            transactions=models.Transaction.objects.all()
-            print(transactions)
-            trans_to_show=[]
-            for trans in transactions:
-                if trans.from_account==None:
-                    continue
-                if from_account==trans.from_account.accountid:
-                    print("success")
-                    trans_to_show.append(trans)
-            print(trans_to_show)
-            return render(request,'accounts/view_transactions.html',context={
-                'transaction_list':trans_to_show,
-                'user_accounts':user_accounts,
-                'view_transactions':form,
-            })
-        return render(request, 'accounts/invalid_account.html') #MEANS THERE'S AN ERROR IN FORM 
-
-
-
-
-
 class TransferFundProcess(LoginRequiredMixin,TemplateView):
     template_name='transfer_fund_process.html'
     login_url='login'
@@ -394,82 +324,6 @@ class TransferFundProcess(LoginRequiredMixin,TemplateView):
     def get(self,request):
         return HttpResponseRedirect(reverse('accounts:transferfundprocess'))
         # return render(request,'transfer_fund_process.html')
-
-
-            
-
-            
-
-
-# class SearchTransactions(LoginRequiredMixin,TemplateView):
-#     template_name='search_transactions.html'
-#     login_url='login'
-
-#     def get(self,request):
-#         form=SearchTransactionForm
-#         accounts=get_accounts(request)
-#         return render(request,'accounts/search_transactions.html',context={
-#             'search_form':form,
-#             'user_accounts':accounts,
-#         })
-
-#     def post(self,request):
-#         search_form=SearchTransactionForm
-#         form=SearchTransactionForm(request.POST)
-#         #if form.is_valid():
-#             #amount=form.cleaned_data['amount']
-#             #option=form.cleaned_data['option']
-#         user_id=request.user.id
-#         accounts=get_accounts(request)
-#         if amount<0:
-#             return render(request,'accounts:invalid_input.html')
-#         transactions=models.Transaction.objects.all()
-#         trans_list=[]
-#         for trans in transactions:
-#             if (trans.from_account.user.user.id==user_id or trans.to_account.user.user.id==user_id) and trans.amount<amount:
-#                 trans_list.append(trans)
-#         return render(request,'accounts/search_transactions.html',context={
-#                 'transaction_list':trans_list,
-#                 'user_accounts':accounts,
-#                 'search_form':form,
-#             })
-            
-
-        
-       
-
-# class SearchTransactionsInternal(LoginRequiredMixin, TemplateView):
-#     template_name='search_transactions_internal.html'
-#     login_url='login'
-
-#     def get(self,request):
-#         role=who_is(request)
-#         if role=='P':
-#             return HttpResponseRedirect(reverse('accounts:admindashboard'))
-#         form=SearchTransactionInternalForm
-#         accounts=models.Account.objects.all()
-#         return render(request,'accounts/search_transactions_internal.html',context={
-#             'search_form':form,
-#             'user_accounts':accounts,
-#         })
-
-#     def post(self,request):
-#         form=SearchTransactionInternalForm(request.POST)
-#         if form.is_valid():
-#             from_account=form.cleaned_data['from_account']
-#             accounts=models.Account.objects.all()        
-#             trans_list=[]
-#             transactions=models.Transaction.objects.all()
-#             for trans in transactions:
-#                 if trans.from_account.accountid==from_account:
-#                     trans_list.append(trans)
-#             return render(request,'accounts/search_transactions_internal.html',context={
-#                 'transaction_list':trans_list,
-#                 'user_accounts':accounts,
-#                 'search_form':form,
-#             })
-#         else:
-#             return render(request,'accounts/invalid_input.html')
 
 
 class SignUp(generic.CreateView):
@@ -488,7 +342,7 @@ def get_accounts(request):
     for account in accounts:
         # print(account,account.user.id,user_id)
         if account.user.user.id==user_id:
+            # print(user_accounts)
             return(account)
-    # print(user_accounts)
     
 
