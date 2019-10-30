@@ -7,9 +7,7 @@
     {{ transact_form.as_p }}
     <button type="btn btn-success" value="submit">Transfer</button>
 </form>
-{% for account in user_accounts %}
-<h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
-{% endfor %} 
+
 {% comment %}
 <form method="POST" name="form">
     {% csrf_token %}
@@ -27,8 +25,6 @@
         <input type="submit" value="Submit">
     </form>
 
-    {% for account in user_accounts %}
-    <h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
-    {% endfor %} {% endcomment %}
+     {% endcomment %}
     {% endblock %}
 

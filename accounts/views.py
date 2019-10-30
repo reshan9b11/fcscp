@@ -415,8 +415,8 @@ class SearchTransactions(LoginRequiredMixin,TemplateView):
     def post(self,request):
         search_form=SearchTransactionForm
         form=SearchTransactionForm(request.POST)
-        if form.is_valid():
-            amount=form.cleaned_data['amount']
+        #if form.is_valid():
+            #amount=form.cleaned_data['amount']
             #option=form.cleaned_data['option']
         user_id=request.user.id
         accounts=get_accounts(request)

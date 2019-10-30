@@ -7,8 +7,7 @@
     {{ submit_form.as_p }}
     <button type="btn btn-success" value="submit">Do It</button>
 </form>
-{% for account in user_accounts %}
-<h3>Balance in {{ account.accountid }} is {{ account.balance }}</h3>
+
 {% endfor %} 
 
     {% endblock %}
