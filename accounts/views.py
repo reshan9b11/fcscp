@@ -23,7 +23,7 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TransferFundsForm, ViewTransactionsForm, DebitFromAccountForm, SearchTransactionForm, SearchTransactionInternalForm, SubmitRequestForm
+from .forms import TransferFundsForm, ViewTransactionsForm, SearchTransactionInternalForm, SubmitRequestForm
 
 
 
@@ -325,11 +325,6 @@ class ViewTransactions(LoginRequiredMixin,TemplateView):
     login_url='login'
 
     def get(self,request):
-        role=who_is(request)
-        if role=='C':
-            return HttpResponseRedirect(reverse('accounts:merchantdashboard'))
-        if role=='P':
-            return HttpResponseRedirect(reverse('accounts:merchantdashboard'))
         form_class=ViewTransactionsForm
         accounts=models.Account.objects.all()
         user_id=request.user.id
@@ -410,9 +405,6 @@ class SearchTransactions(LoginRequiredMixin,TemplateView):
     login_url='login'
 
     def get(self,request):
-        role=who_is(request)
-        if role=='P':
-            return HttpResponseRedirect(reverse('accounts:admindashboard'))
         form=SearchTransactionForm
         accounts=get_accounts(request)
         return render(request,'accounts/search_transactions.html',context={
@@ -425,35 +417,25 @@ class SearchTransactions(LoginRequiredMixin,TemplateView):
         form=SearchTransactionForm(request.POST)
         if form.is_valid():
             amount=form.cleaned_data['amount']
-            option=form.cleaned_data['option']
+            #option=form.cleaned_data['option']
         user_id=request.user.id
         accounts=get_accounts(request)
         if amount<0:
             return render(request,'accounts:invalid_input.html')
         transactions=models.Transaction.objects.all()
-        if option=='Lower':
-            trans_list=[]
-            for trans in transactions:
-                if (trans.from_account.user.user.id==user_id or trans.to_account.user.user.id==user_id) and trans.amount<amount:
-                    trans_list.append(trans)
-            return render(request,'accounts/search_transactions.html',context={
+        trans_list=[]
+        for trans in transactions:
+            if (trans.from_account.user.user.id==user_id or trans.to_account.user.user.id==user_id) and trans.amount<amount:
+                trans_list.append(trans)
+        return render(request,'accounts/search_transactions.html',context={
                 'transaction_list':trans_list,
                 'user_accounts':accounts,
                 'search_form':form,
             })
+            
 
-        elif option=='Greater':
-            trans_list=[]
-            for trans in transactions:
-                if (trans.from_account.user.user.id==user_id or trans.to_account.user.user.id==user_id) and trans.amount>=amount:
-                    trans_list.append(trans)
-            return render(request,'accounts/search_transactions.html',context={
-                'transaction_list':trans_list,
-                'user_accounts':accounts,
-                'search_form':form,
-            })
-        else:
-            return render(request,'accounts/invalid_input.html')
+        
+       
 
 class SearchTransactionsInternal(LoginRequiredMixin, TemplateView):
     template_name='search_transactions_internal.html'
@@ -498,5 +480,16 @@ class SignUp(generic.CreateView):
 
 class HomePageView(TemplateView):
     template_name='home.html'
+
+def get_accounts(request):
+    accounts = models.Account.objects.all()
+    user_id=request.user.id
+    user_accounts=[]
+    for account in accounts:
+        # print(account,account.user.id,user_id)
+        if account.user.user.id==user_id:
+            user_accounts.append(account)
+    # print(user_accounts)
+    return user_accounts    
 
 

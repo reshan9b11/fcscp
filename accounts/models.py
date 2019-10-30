@@ -69,13 +69,13 @@ class Transaction(models.Model):
 
     @staticmethod
     
-    def create(userid,status,from_account,to_account,amount,ttype):
+    def create(userid,from_account,to_account,amount,ttype):
         userobject=UserProfile.objects.all()
         for users in userobject:
             if users.user.id==userid:
                 actualuser=users
                 break
-        transaction=Transaction(user=actualuser,from_account=from_account,to_account=to_account,amount=amount,ttype=ttype)
+        transaction=Transaction(user=actualuser,from_account=from_account,to_account=to_account,amount=amount,ttype='T')
         transaction.save()
         return transaction        
 # Create your models here.

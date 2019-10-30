@@ -55,18 +55,9 @@ class TransferFundsForm(forms.Form):
 class ViewTransactionsForm(forms.Form):
     from_account=forms.IntegerField(required=True)
 
-class DebitFromAccountForm(forms.Form):
-    CHOICES=(('Debit','Debit'),('Credit','Credit'),)
-    from_account=forms.IntegerField(required=True)
-    amount=forms.IntegerField(required=True)
-    option=forms.ChoiceField(choices=CHOICES)
-    publickey=forms.CharField(required=True,widget=forms.Textarea)
 
-
-class SearchTransactionForm(forms.Form):
-    CHOICES=(('Lower','Lower'),('Greater','Greater'),)
-    option=forms.ChoiceField(choices=CHOICES)
-    amount=forms.IntegerField(required=True)
+#class SearchTransactionForm(forms.Form):
+    #amount=forms.IntegerField(required=True)
     
 class SearchTransactionInternalForm(forms.Form):
     from_account=forms.IntegerField(required=True)
