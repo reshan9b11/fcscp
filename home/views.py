@@ -46,6 +46,8 @@ def change_friends(request, operation, pk):
     friend = User.objects.get(pk=pk)
     if operation == 'add':
         Friend.make_friend(request.user, friend)
+        Friend.make_friend(friend, request.user)
     elif operation == 'remove':
         Friend.lose_friend(request.user, friend)
+        Friend.lose_friend(friend, request.user)
     return redirect('home:home')
