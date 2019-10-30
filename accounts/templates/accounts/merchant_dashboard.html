@@ -8,20 +8,9 @@
 <br>
 <h4>Your Account Actions:</h4>
 <br>
-<a href="{% url 'accounts:debitfromaccount' %}">Debit/Credit From Account</a><br><br>
 <a href="{% url 'accounts:transferfunds' %}">Transfer Funds</a><br><br>
 <a href="{% url 'accounts:viewtransactions' %}">My Transactions</a><br><br>
 <a href="{% url 'accounts:searchtransactions' %}">Search Transaction</a><br><br>
-<a href="{% url 'accounts:submitrequest' %}">Submit Request</a><br><br>
-<a href="{% url 'accounts:merchantrequest' %}">View Merchant Request</a><br><br>
-{% comment %}<a href="{% url 'accounts:viewtransactions' %}">Debit/Credit From Account</a><br><br>{% endcomment %}
 
-{% comment %}
-{% for account in selected_accounts %}
-
-    {{ account.balance }}
-
-{% endfor %}
-{% endcomment %}
 
 {% endblock %}
